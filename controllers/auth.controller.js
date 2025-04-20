@@ -10,7 +10,6 @@ import resetPasswordTemplate from "../utils/resetPasswordTemplate.js";
 import emailOTPtemplate from "../utils/emailOTPtemplate.js";
 
 const secure = process.env.NODE_ENV === "production";
-const otpCode = 0;
 
 const auth = {
   signup: async (req, res) => {
