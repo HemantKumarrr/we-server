@@ -12,7 +12,7 @@ import savedPostRouter from "../routes/savedPost.js";
 import errorHandlerMiddleware from "../utils/handleError.js";
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 
 // Database Conncetion
 connectDB();
@@ -35,7 +35,7 @@ app.use(userRouter);
 app.use(savedPostRouter);
 
 app.get("/", (req, res) => {
-  res.send("Working");
+  res.send("Server is up and running");
 });
 
 // Error Handler
