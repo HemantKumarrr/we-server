@@ -73,7 +73,7 @@ const auth = {
       const accessToken = jwtFn.genJWT(data._id);
       res.cookie("accessToken", accessToken, {
         maxAge: 3600000,
-        sameSite: "lax",
+        sameSite: "None",
         httpOnly: true,
         secure: secure,
       });
@@ -122,7 +122,7 @@ const auth = {
       console.log("Google Login response: ", user);
       res.cookie("accessToken", accessToken, {
         maxAge: 3600000,
-        sameSite: "lax",
+        sameSite: "None",
         httpOnly: true,
         secure: secure,
       });
@@ -136,7 +136,7 @@ const auth = {
     try {
       res.cookie("accessToken", "", {
         maxAge: 1000,
-        sameSite: "lax",
+        sameSite: "None",
         httpOnly: true,
         secure: secure,
       });
@@ -168,7 +168,7 @@ const auth = {
       user.resetTokenExpiry = Date.now() + 15 * 60 * 1000; // 15 minutes expiry
       await user.save();
 
-      const message = `http://localhost:5173/reset-password/${resetToken}`;
+      const message = `${process.env.ORIGIN}/reset-password/${resetToken}`;
       sendEmail(
         email,
         "Prod.me Reset Password Link",
@@ -233,7 +233,7 @@ const auth = {
       const accessToken = jwtFn.genJWT(user._id);
       res.cookie("accessToken", accessToken, {
         maxAge: 3600000,
-        sameSite: "lax",
+        sameSite: "None",
         httpOnly: true,
         secure: secure,
       });
