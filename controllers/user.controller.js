@@ -1,11 +1,55 @@
 import User from "../models/user.model.js";
 import Post from "../models/post.model.js";
 
+const getPublicIdFromUrl = (url) => {
+  try {
+    if (!url || typeof url !== "string") {
+      throw new Error("Invalid input: URL must be a string");
+    }
+
+    const path = new URL(url).pathname; // /video/upload/v1746026112/postAudios/ybm76smyekoxy2rmma2q.wav
+    const parts = path.split("/");
+
+    const uploadIndex = parts.indexOf("upload");
+    if (uploadIndex === -1) {
+      throw new Error("URL does not contain 'upload'");
+    }
+
+    // Get everything after 'upload'
+    let publicParts = parts.slice(uploadIndex + 1);
+
+    // Remove version number like v1746026112
+    if (/^v\d+$/.test(publicParts[0])) {
+      publicParts.shift();
+    }
+
+    // Remove extension from last part
+    const last = publicParts.pop();
+    const fileNameWithoutExt = last.split(".").slice(0, -1).join(".") || last;
+
+    publicParts.push(fileNameWithoutExt);
+    return publicParts.join("/");
+  } catch (err) {
+    console.error("Error extracting public_id:", err.message);
+    return null;
+  }
+};
+
 const userFn = {
   deleteUser: async (req, res) => {
     try {
       const userId = req.params.uid;
+
       const data = await User.deleteOne({ _id: userId });
+      const dataInfo = await Post.find({ user: userId });
+
+      if (dataInfo.imageUrl) {
+        await deleteAsset(getPublicIdFromUrl(dataInfo.imageUrl), "image");
+      }
+      if (dataInfo.audioUrl) {
+        await deleteAsset(getPublicIdFromUrl(dataInfo.audioUrl), "video");
+      }
+
       const deletePosts = await Post.deleteMany({ user: userId });
       res.status(200).json({ message: "user account deleted" });
     } catch (error) {
