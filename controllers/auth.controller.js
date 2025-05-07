@@ -2,7 +2,6 @@ import User from "../models/user.model.js";
 import jwtFn from "../middleware/inti_jwt.js";
 import oauth2Client from "../utils/googleClient.js";
 import axios from "axios";
-import bcrypt from "bcrypt";
 import sendEmail from "../utils/email.js";
 import jsonwebtoken, { decode } from "jsonwebtoken";
 const jwt = jsonwebtoken;
@@ -74,7 +73,7 @@ const auth = {
       const accessToken = jwtFn.genJWT(data._id);
       res.cookie("accessToken", accessToken, {
         maxAge: 3600000,
-        sameSite: "None",
+        sameSite: "Lax",
         httpOnly: true,
         secure: secure,
       });
@@ -137,7 +136,7 @@ const auth = {
     try {
       res.cookie("accessToken", "", {
         maxAge: 1000,
-        sameSite: "None",
+        sameSite: "Lax",
         httpOnly: true,
         secure: secure,
       });

@@ -62,10 +62,9 @@ const post = {
   getUserPosts: async (req, res) => {
     try {
       const userId = req.params.uid;
-      const data = await Post.find({ user: userId }).populate(
-        "user",
-        "username"
-      );
+      const data = await Post.find({ user: userId })
+        .populate("user", "username")
+        .sort({ createdAt: -1 });
       res.status(200).json(data);
     } catch (error) {
       console.log(error);
