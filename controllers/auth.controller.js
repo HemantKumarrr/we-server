@@ -73,7 +73,7 @@ const auth = {
       const accessToken = jwtFn.genJWT(data._id);
       res.cookie("accessToken", accessToken, {
         maxAge: 3600000,
-        sameSite: "Lax",
+        sameSite: "None",
         httpOnly: true,
         secure: secure,
       });
@@ -136,7 +136,7 @@ const auth = {
     try {
       res.cookie("accessToken", "", {
         maxAge: 1000,
-        sameSite: "Lax",
+        sameSite: "None",
         httpOnly: true,
         secure: secure,
       });
