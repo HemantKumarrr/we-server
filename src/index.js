@@ -16,13 +16,28 @@ const PORT = process.env.PORT || 5000;
 
 // Database Conncetion
 connectDB();
-const origin = process.env.ORIGIN;
-app.use(
-  cors({
-    origin: origin,
-    credentials: true,
-  })
-);
+const origin_main = process.env.ORIGIN;
+
+const allowedOrigins = [
+  "http://localhost:5173", // Example frontend domain
+  origin_main, // Example production domain
+];
+
+// Configure CORS options
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 app.use(cookieParse());
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
