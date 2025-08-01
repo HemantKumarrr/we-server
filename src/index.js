@@ -2,6 +2,7 @@ import express, { urlencoded } from "express";
 import { connectDB } from "../config/mongodb.js";
 import cors from "cors";
 import cookieParse from "cookie-parser";
+import compression from "compression";
 import dotenv from "dotenv";
 dotenv.config();
 import authRouter from "../routes/auth.route.js";
@@ -39,6 +40,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(cookieParse());
+app.use(compression());
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
 
